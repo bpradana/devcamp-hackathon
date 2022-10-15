@@ -26,6 +26,7 @@ class InputProductActivity : AppCompatActivity() {
     private lateinit var imageUri: Uri
     private lateinit var listTags: ArrayList<String>
     private lateinit var tagsAdapter: TagsAdapter
+    private var isExifExist: Boolean = false
 
     companion object {
         const val RESULT_CODE_ADD_PRODUCT = 1
@@ -76,7 +77,7 @@ class InputProductActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_IMAGE) {
             imageUri = data?.data!!
-
+            isExifExist = false
             val exif = getPictureData(this, imageUri)
             val tagsToCheck = arrayOf(
                 ExifInterface.TAG_DATETIME,
@@ -91,6 +92,7 @@ class InputProductActivity : AppCompatActivity() {
                 exif?.getAttribute(tag)?.let {
                     hashMap[tag] = it
                     Log.d(TAG, "exif image, $tag = $it")
+                    isExifExist = true
                 }
 
             Log.d(TAG, "image data = $data")
@@ -102,17 +104,18 @@ class InputProductActivity : AppCompatActivity() {
 
     private fun save() {
         binding.apply {
-            val name: String = etName.text.toString()
+            val title: String = etTitle.text.toString()
+            val price: String = etPrice.text.toString()
             val desc: String = etDesc.text.toString()
 
-            if (desc.isEmpty()) {
-                etDesc.error = "Please fill in the data!"
-                etDesc.requestFocus()
+            if (title.isEmpty()) {
+                etTitle.error = "Please fill in the data!"
+                etTitle.requestFocus()
                 return
             }
-            if (name.isEmpty()) {
-                etName.error = "Please fill in the data!"
-                etName.requestFocus()
+            if (price.isEmpty()) {
+                etPrice.error = "Please fill in the data!"
+                etPrice.requestFocus()
                 return
             }
 
@@ -123,7 +126,8 @@ class InputProductActivity : AppCompatActivity() {
             }
 
             val id = UUID.randomUUID().toString()
-            val product = Product(id, name, desc, null)
+            val product = Product(id, title, price.toFloat(), desc, null, null, isExifExist)
+            Log.d(TAG, "product = $product")
 
             viewModel.addProductToStorage(product, imageUri).apply {
                 val resultIntent = Intent()
