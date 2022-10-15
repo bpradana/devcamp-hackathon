@@ -27,6 +27,11 @@ class ProductController {
     const product = await this.productService.deleteProduct(req.params.id);
     res.send(product);
   }
+
+  async checkCompletion(req, res) {
+    const completion = await this.productService.checkCompletion(req.params.id);
+    res.send(completion);
+  }
 }
 
 module.exports = ProductController;

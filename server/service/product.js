@@ -24,6 +24,25 @@ class ProductService {
   async deleteProduct(id) {
     return this.productRepository.deleteProduct(id);
   }
+
+  async checkCompletion(id) {
+    const product = await this.productRepository.getProductById(id);
+
+    const emptyFields = [];
+    if (!product.title) emptyFields.push('title');
+    if (!product.image.data) emptyFields.push('image');
+    if (!product.price) emptyFields.push('price');
+    if (!product.description) emptyFields.push('description');
+    if (!product.specification.size.width) emptyFields.push('size width');
+    if (!product.specification.size.height) emptyFields.push('size height');
+    if (!product.specification.type) emptyFields.push('type');
+    if (!product.specification.material) emptyFields.push('material');
+    if (!product.tags) emptyFields.push('tags');
+
+    const score = (1 - emptyFields.length / 9) * 100;
+    return { score, emptyFields };
+  }
+
 }
 
 module.exports = ProductService;
