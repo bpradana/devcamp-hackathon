@@ -23,4 +23,6 @@
     <string name="chest">Chest</string>
     <string name="neck">Neck</string>
     <string name="score">score</string>
+    <string name="please_complete_product_information">Please complete your product information</string>
+    <string name="empty_field">Empty Field</string>
 </resources>
