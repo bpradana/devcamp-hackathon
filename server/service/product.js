@@ -42,14 +42,8 @@ class ProductService {
     if (!product.description) emptyFields.push('description');
     if (!product.specification.type) emptyFields.push('type');
     if (!product.specification.material) emptyFields.push('material');
-    if (!product.tags) emptyFields.push('tags');
-
-    for (let i = 0; i < product.specification.sizes.length; i++) {
-      if (!product.specification.sizes[i].name) emptyFields.push(`size ${i+1} name`);
-      if (!product.specification.sizes[i].waist) emptyFields.push(`size ${i+1} waist`);
-      if (!product.specification.sizes[i].chest) emptyFields.push(`size ${i+1} chest`);
-      if (!product.specification.sizes[i].neck) emptyFields.push(`size ${i+1} neck`);
-    }
+    if (!product.tags.length) emptyFields.push('tags');
+    if (!product.specification.sizes.length) emptyFields.push('sizes');
 
     const score = (1 - emptyFields.length / (7 + 4 * product.specification.sizes.length)) * 100;
     return { score, emptyFields };
