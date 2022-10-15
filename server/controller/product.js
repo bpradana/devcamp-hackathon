@@ -17,6 +17,16 @@ class ProductController {
     const product = await this.productService.createProduct(req.body);
     res.send(product);
   }
+
+  async updateProduct(req, res) {
+    const product = await this.productService.updateProduct(req.params.id, req.body);
+    res.send(product);
+  }
+
+  async deleteProduct(req, res) {
+    const product = await this.productService.deleteProduct(req.params.id);
+    res.send(product);
+  }
 }
 
 module.exports = ProductController;

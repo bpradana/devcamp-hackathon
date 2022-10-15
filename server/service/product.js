@@ -16,6 +16,14 @@ class ProductService {
   async createProduct(product) {
     return this.productRepository.createProduct(product);
   }
+
+  async updateProduct(id, product) {
+    return this.productRepository.updateProduct(id, product);
+  }
+
+  async deleteProduct(id) {
+    return this.productRepository.deleteProduct(id);
+  }
 }
 
 module.exports = ProductService;
