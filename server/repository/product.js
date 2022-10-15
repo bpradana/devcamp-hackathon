@@ -36,7 +36,9 @@ class ProductRepository {
 
   async updateProduct(id, product) {
     try {
-      return await this.productModel.findByIdAndUpdate(id, product);
+      return await this.productModel.findByIdAndUpdate(id, product, {
+        returnDocument: "after",
+      });
     } catch (err) {
       return {
         message: err.message || "Internal Server Error. Please try again.",
