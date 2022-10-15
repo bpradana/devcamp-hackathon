@@ -15,7 +15,9 @@ class ProductService {
   }
 
   async getProductById(id) {
-    return this.productRepository.getProductById(id);
+    const product = await this.productRepository.getProductById(id);
+    const completion = await this.checkCompletion(id);
+    return { ...product.toObject(), completion };
   }
 
   async createProduct(product) {
