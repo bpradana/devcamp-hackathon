@@ -3,6 +3,7 @@ package com.tkpd.hackathon17.ui.list
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tkpd.hackathon17.data.response.ProductResponse
@@ -31,10 +32,15 @@ class ListProductActivity : AppCompatActivity() {
         binding.btnAdd.setOnClickListener {
             startActivity(Intent(this, InputProductActivity::class.java))
         }
+        binding.btnRefresh.setOnClickListener { populateProducts() }
     }
 
     private fun populateProducts() {
         viewModel.getListProduct().observe(this) { listProducts ->
+            if (listProducts.isNullOrEmpty()) {
+                binding.btnRefresh.visibility = View.VISIBLE
+            } else binding.btnRefresh.visibility = View.GONE
+
             adapter = ProductAdapter(listProducts)
             binding.apply {
                 rvProducts.layoutManager = LinearLayoutManager(this@ListProductActivity)

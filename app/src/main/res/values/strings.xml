@@ -25,4 +25,6 @@
     <string name="score">score</string>
     <string name="please_complete_product_information">Please complete your product information</string>
     <string name="empty_field">Empty Field</string>
+    <string name="refresh">Refresh</string>
+    <string name="delete">Delete</string>
 </resources>
