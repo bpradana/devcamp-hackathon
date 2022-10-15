@@ -31,6 +31,9 @@ const productSchema = new mongoose.Schema({
   },
   tags: {
     type: [String]
+  },
+  exif: {
+    type: Boolean
   }
 });
 
