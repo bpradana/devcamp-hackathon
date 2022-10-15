@@ -26,7 +26,7 @@ class ProductRepository {
   async createProduct(product) {
     try {
       const newProduct = new this.productModel(product);
-      return newProduct.save();
+      return await newProduct.save();
     } catch (err) {
       return {
         message: err.message || "Internal Server Error. Please try again.",
