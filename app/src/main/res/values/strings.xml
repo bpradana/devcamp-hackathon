@@ -11,4 +11,15 @@
     <string name="list_of_products">List of Products</string>
     <string name="price">Price</string>
     <string name="result">Result</string>
+    <string name="specification">Specification</string>
+    <string name="type">Type</string>
+    <string name="material">Material</string>
+    <string name="sizes">Sizes</string>
+    <string name="add_product_size">Add Product Size Variant</string>
+    <string name="size_name">Size Name</string>
+    <string name="product_size">Product Size</string>
+    <string name="waist">Waist</string>
+    <string name="add_size">Add Size</string>
+    <string name="chest">Chest</string>
+    <string name="neck">Neck</string>
 </resources>
