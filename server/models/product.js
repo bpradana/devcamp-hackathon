@@ -14,14 +14,22 @@ const productSchema = new mongoose.Schema({
     type: String
   },
   specification: {
-    size: {
-      width: {
-        type: Number
-      },
-      height: {
-        type: Number
-      },
-    },
+    sizes: [
+      {
+        name: {
+          type: String
+        },
+        waist: {
+          type: Number
+        },
+        chest: {
+          type: Number
+        },
+        neck: {
+          type: Number
+        }
+      }
+    ],
     type: {
       type: String
     },
