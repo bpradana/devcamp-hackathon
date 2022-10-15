@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
 
-    private const val API_BASE = "https://serpapi.com/"
+    private const val API_BASE = "https://3351-103-94-190-25.ap.ngrok.io/"
     fun create(): ApiServices {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
