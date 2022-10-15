@@ -55,6 +55,20 @@ class DataRepository {
         )
     }
 
+    private fun updateProduct(product: Product, onResult: (Product?) -> Unit) {
+        ApiClient.create().updateProduct(product).enqueue(object : Callback<Product> {
+            override fun onFailure(call: Call<Product>, t: Throwable) {
+                onResult(null)
+            }
+            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+                val addedProduct = response.body()
+                onResult(addedProduct)
+                Log.d(TAG, "product response $addedProduct")
+            }
+        }
+        )
+    }
+
     fun addProductToStorage(product: Product, imageUri: Uri): Boolean {
         val fileName = StringBuilder("${product.id}.jpg")
         val storageReference = FirebaseStorage.getInstance().getReference("images/$fileName")
@@ -84,6 +98,21 @@ class DataRepository {
             Log.d(TAG, "failed upload image $it")
         }
         return true
+    }
+
+    fun getDetailProduct(productId: String): LiveData<ProductResponse> {
+        val photo = MutableLiveData<ProductResponse>()
+        ApiClient.create().getDetailProduct(productId).enqueue(object : Callback<ProductResponse>{
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                t.message?.let { Log.d(TAG, it) }
+            }
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful) {
+                    photo.postValue(response.body())
+                }
+            }
+        })
+        return photo
     }
 
 }

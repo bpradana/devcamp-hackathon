@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tkpd.hackathon17.data.DataRepository
 import com.tkpd.hackathon17.di.Injection
+import com.tkpd.hackathon17.ui.detail.DetailProductViewModel
 import com.tkpd.hackathon17.ui.input.InputProductViewModel
 import com.tkpd.hackathon17.ui.list.ListProductViewModel
 
@@ -29,6 +30,9 @@ class ViewModelFactory private constructor(private val dataRepository: DataRepos
             }
             modelClass.isAssignableFrom(ListProductViewModel::class.java) -> {
                 ListProductViewModel(dataRepository) as T
+            }
+            modelClass.isAssignableFrom(DetailProductViewModel::class.java) -> {
+                DetailProductViewModel(dataRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

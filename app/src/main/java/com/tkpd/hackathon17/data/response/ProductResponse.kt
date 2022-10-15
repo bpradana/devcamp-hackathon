@@ -1,6 +1,8 @@
 package com.tkpd.hackathon17.data.response
 
 import com.google.gson.annotations.SerializedName
+import com.tkpd.hackathon17.data.model.Completion
+import com.tkpd.hackathon17.data.model.Specification
 
 data class ProductResponse(
 
@@ -21,4 +23,10 @@ data class ProductResponse(
 
     @field:SerializedName("tags")
     val tags: ArrayList<String>? = null,
+
+    @field:SerializedName("specification")
+    val specification: Specification? = null,
+
+    @field:SerializedName("completion")
+    val completion: Completion? = null,
 )

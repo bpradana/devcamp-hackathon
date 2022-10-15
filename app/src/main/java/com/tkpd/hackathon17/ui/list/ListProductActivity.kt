@@ -1,11 +1,15 @@
 package com.tkpd.hackathon17.ui.list
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tkpd.hackathon17.data.response.ProductResponse
 import com.tkpd.hackathon17.databinding.ActivityListProductBinding
+import com.tkpd.hackathon17.ui.detail.DetailProductActivity
+import com.tkpd.hackathon17.ui.detail.DetailProductViewModel
+import com.tkpd.hackathon17.ui.input.InputProductActivity
 import com.tkpd.hackathon17.viewmodel.ViewModelFactory
 
 class ListProductActivity : AppCompatActivity() {
@@ -17,11 +21,16 @@ class ListProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.title = "List of Products"
+        supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         val factory = ViewModelFactory.getInstance(this)
         viewModel = ViewModelProvider(this, factory)[ListProductViewModel::class.java]
 
         populateProducts()
+        binding.btnAdd.setOnClickListener {
+            startActivity(Intent(this, InputProductActivity::class.java))
+        }
     }
 
     private fun populateProducts() {
@@ -34,15 +43,21 @@ class ListProductActivity : AppCompatActivity() {
             }
 
             adapter.setOnItemClickCallback(object : ProductAdapter.OnItemClickCallback {
+                override fun onItemDelete(data: ProductResponse) { }
                 override fun onItemClicked(data: ProductResponse) {
-                    TODO("Not yet implemented")
+                    Intent(this@ListProductActivity, DetailProductActivity::class.java).also {
+                        it.putExtra(DetailProductActivity.EXTRA_PRODUCT, data.id)
+                        startActivity(it)
+                    }
                 }
 
-                override fun onItemDelete(data: ProductResponse) {
-                    TODO("Not yet implemented")
-                }
             })
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 }
