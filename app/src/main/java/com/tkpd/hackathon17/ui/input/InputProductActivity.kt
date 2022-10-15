@@ -2,8 +2,11 @@ package com.tkpd.hackathon17.ui.input
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
@@ -15,7 +18,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tkpd.hackathon17.data.model.Product
+import com.tkpd.hackathon17.data.model.Size
+import com.tkpd.hackathon17.data.model.Specification
 import com.tkpd.hackathon17.databinding.ActivityInputProductBinding
+import com.tkpd.hackathon17.databinding.DialogSizeBinding
 import com.tkpd.hackathon17.utils.Utils.getPictureData
 import com.tkpd.hackathon17.viewmodel.ViewModelFactory
 import java.util.*
@@ -25,7 +31,9 @@ class InputProductActivity : AppCompatActivity() {
     private lateinit var viewModel: InputProductViewModel
     private lateinit var imageUri: Uri
     private lateinit var listTags: ArrayList<String>
+    private lateinit var listSizes: ArrayList<Size>
     private lateinit var tagsAdapter: TagsAdapter
+    private lateinit var sizesAdapter: SizesAdapter
     private var isExifExist: Boolean = false
 
     companion object {
@@ -50,7 +58,12 @@ class InputProductActivity : AppCompatActivity() {
         binding.btnChooseImage.setOnClickListener { chooseImage() }
         binding.btnSubmit.setOnClickListener { save() }
         binding.btnAddTag.setOnClickListener { addTag() }
-        populateVariant()
+        binding.btnAddSize.setOnClickListener { showDialogAddSize() }
+
+        listTags = ArrayList(0)
+        listSizes = ArrayList(0)
+        populateTags()
+        populateSizes()
     }
 
     private fun chooseImage() {
@@ -107,6 +120,8 @@ class InputProductActivity : AppCompatActivity() {
             val title: String = etTitle.text.toString()
             val price: String = etPrice.text.toString()
             val desc: String = etDesc.text.toString()
+            val type: String = etType.text.toString()
+            val material: String = etMaterial.text.toString()
 
             if (title.isEmpty()) {
                 etTitle.error = "Please fill in the data!"
@@ -126,7 +141,8 @@ class InputProductActivity : AppCompatActivity() {
             }
 
             val id = UUID.randomUUID().toString()
-            val product = Product(id, title, price.toFloat(), desc, null, null, isExifExist)
+            val specification = Specification(type, material, listSizes)
+            val product = Product(id, title, price.toFloat(), desc, listTags, null, isExifExist, specification)
             Log.d(TAG, "product = $product")
 
             viewModel.addProductToStorage(product, imageUri).apply {
@@ -157,8 +173,7 @@ class InputProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun populateVariant() {
-        listTags = ArrayList(0)
+    private fun populateTags() {
         tagsAdapter = TagsAdapter(listTags)
         binding.apply {
             rvTags.layoutManager = LinearLayoutManager(this@InputProductActivity)
@@ -171,6 +186,68 @@ class InputProductActivity : AppCompatActivity() {
             override fun onItemDelete(data: String) {
                 listTags.remove(data)
                 tagsAdapter.notifyDataSetChanged()
+            }
+        })
+    }
+
+    private fun showDialogAddSize() {
+        val dialog = Dialog(this)
+        val dialogBinding = DialogSizeBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+        dialogBinding.apply {
+            btnDone.setOnClickListener {
+                val sizeName = etSizeName.text.toString()
+                val waist = etWaist.text.toString()
+                val chest = etChest.text.toString()
+                val neck = etNeck.text.toString()
+
+                if (sizeName.isEmpty()) {
+                    etSizeName.error = "Please fill in the data!"
+                    etSizeName.requestFocus()
+                    return@setOnClickListener
+                }
+                if (waist.isEmpty()) {
+                    etWaist.error = "Please fill in the data!"
+                    etWaist.requestFocus()
+                    return@setOnClickListener
+                }
+                if (chest.isEmpty()) {
+                    etChest.error = "Please fill in the data!"
+                    etChest.requestFocus()
+                    return@setOnClickListener
+                }
+                if (neck.isEmpty()) {
+                    etNeck.error = "Please fill in the data!"
+                    etNeck.requestFocus()
+                    return@setOnClickListener
+                }
+
+                val newSize = Size(sizeName, waist.toFloat(), chest.toFloat(), neck.toFloat())
+                listSizes.add(newSize).apply {
+                    sizesAdapter.notifyDataSetChanged()
+                    Log.d(TAG, "sizes : $listSizes")
+                    dialog.dismiss()
+                }
+            }
+            btnClose.setOnClickListener { dialog.dismiss() }
+        }
+    }
+
+    private fun populateSizes() {
+        sizesAdapter = SizesAdapter(listSizes)
+        binding.apply {
+            rvSizes.layoutManager = LinearLayoutManager(this@InputProductActivity)
+            rvSizes.setHasFixedSize(true)
+            rvSizes.adapter = sizesAdapter
+        }
+
+        sizesAdapter.setOnItemClickCallback(object : SizesAdapter.OnItemClickCallback {
+            override fun onItemClicked(data: Size) { }
+            override fun onItemDelete(data: Size) {
+                listSizes.remove(data)
+                sizesAdapter.notifyDataSetChanged()
             }
         })
     }

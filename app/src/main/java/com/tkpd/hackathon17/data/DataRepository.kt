@@ -47,8 +47,9 @@ class DataRepository {
                 onResult(null)
             }
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
-                val addedUser = response.body()
-                onResult(addedUser)
+                val addedProduct = response.body()
+                onResult(addedProduct)
+                Log.d(TAG, "product response $addedProduct")
             }
         }
         )
@@ -64,13 +65,14 @@ class DataRepository {
                     product.id,
                     product.title,
                     product.price,
-                    product.desc,
+                    product.description,
                     product.tags,
                     firebaseImageUri.toString(),
-                    product.exif
+                    product.exif,
+                    product.specification
                 )
                 addProduct(newProduct) {
-                    if (it?.id != null) {
+                    if (it != null) {
                         Log.d(TAG, "add product success $it")
                     } else {
                         Log.d(TAG, "add product failed $it")
