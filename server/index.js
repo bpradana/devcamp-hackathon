@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
+const morgan = require('morgan');
 require('dotenv').config();
 
 const app = express();
@@ -17,6 +18,7 @@ mongoose.connect(
 
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
 const routes = require('./route');
 app.use('/product', routes);
