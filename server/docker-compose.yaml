@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  server:
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - MONGO_USERNAME=admin
+      - MONGO_PASSWORD=admin
+      - MONGO_HOST=clusterfuck.jx4cf.mongodb.net
+      - MONGO_DATABASE=products
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin
