@@ -42,14 +42,14 @@ class ProductAdapter(private val listItem: ArrayList<ProductResponse>) : Recycle
         fun bind(item: ProductResponse) {
             with(binding) {
                 itemTitle.text = item.title
-                itemPrice.text = item.price.toString()
+                itemPrice.text = StringBuilder("Rp. ${item.price}")
+                tvScore.text = StringBuilder("${item.completion?.score?.toInt()}")
                 Glide.with(itemView.context)
                     .load(item.image)
                     .apply(
                         RequestOptions.placeholderOf(R.drawable.ic_loading)
                             .error(R.drawable.ic_error))
                     .into(itemImage)
-                //btnDelete.setOnClickListener { onItemClickCallback.onItemDelete(item) }
             }
         }
     }
