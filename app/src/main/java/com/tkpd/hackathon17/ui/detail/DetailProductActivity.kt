@@ -3,6 +3,7 @@ package com.tkpd.hackathon17.ui.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -51,7 +52,7 @@ class DetailProductActivity : AppCompatActivity() {
             tvMaterial.text = product.specification?.material
             tvType.text = product.specification?.type
             tvDesc.text = product.description
-            tvScore.text = product.completion?.score.toString()
+            tvScore.text = product.completion?.score?.toInt().toString()
 
             Glide.with(this@DetailProductActivity)
                 .load(product.image)
@@ -61,6 +62,8 @@ class DetailProductActivity : AppCompatActivity() {
                 .into(imgImage)
 
             populateSizes()
+            populateEmptyFields(product.completion?.emptyFields)
+            populateTags(product.tags)
         }
     }
 
@@ -71,6 +74,30 @@ class DetailProductActivity : AppCompatActivity() {
             rvSizes.layoutManager = LinearLayoutManager(this@DetailProductActivity)
             rvSizes.setHasFixedSize(true)
             rvSizes.adapter = sizesAdapter
+        }
+    }
+
+    private fun populateEmptyFields(emptyFields: ArrayList<String>?) {
+        if (emptyFields != null) {
+            val emptyFieldsAdapter = EmptyFieldsAdapter(emptyFields)
+            binding.apply {
+                rvEmptyFieldss.layoutManager = LinearLayoutManager(this@DetailProductActivity, LinearLayoutManager.HORIZONTAL, false)
+                rvEmptyFieldss.setHasFixedSize(true)
+                rvEmptyFieldss.adapter = emptyFieldsAdapter
+            }
+        } else {
+            binding.pleaseComplete.visibility = View.GONE
+        }
+    }
+
+    private fun populateTags(tags: ArrayList<String>?) {
+        if (tags != null) {
+            val tagsAdapter = DetailTagsAdapter(tags)
+            binding.apply {
+                rvTags.layoutManager = LinearLayoutManager(this@DetailProductActivity, LinearLayoutManager.HORIZONTAL, false)
+                rvTags.setHasFixedSize(true)
+                rvTags.adapter = tagsAdapter
+            }
         }
     }
 }
