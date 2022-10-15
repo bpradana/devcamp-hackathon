@@ -1,29 +1,57 @@
 class ProductRepository {
-  constructor(
-    productModel
-  ) {
+  constructor(productModel) {
     this.productModel = productModel;
   }
 
   async getProducts() {
-    return this.productModel.find();
+    try {
+      return await this.productModel.find();
+    } catch (err) {
+      return {
+        message: err.message || "Internal Server Error. Please try again.",
+      };
+    }
   }
-  
+
   async getProductById(id) {
-    return this.productModel.findById(id);
+    try {
+      return await this.productModel.findById(id);
+    } catch (err) {
+      return {
+        message: err.message || "Internal Server Error. Please try again.",
+      };
+    }
   }
 
   async createProduct(product) {
-    const newProduct = new this.productModel(product);
-    return newProduct.save();
+    try {
+      const newProduct = new this.productModel(product);
+      return newProduct.save();
+    } catch (err) {
+      return {
+        message: err.message || "Internal Server Error. Please try again.",
+      };
+    }
   }
 
   async updateProduct(id, product) {
-    return this.productModel.findByIdAndUpdate(id, product);
+    try {
+      return await this.productModel.findByIdAndUpdate(id, product);
+    } catch (err) {
+      return {
+        message: err.message || "Internal Server Error. Please try again.",
+      };
+    }
   }
 
   async deleteProduct(id) {
-    return this.productModel.findByIdAndDelete(id);
+    try {
+      return await this.productModel.findByIdAndDelete(id);
+    } catch (err) {
+      return {
+        message: err.message || "Internal Server Error. Please try again.",
+      };
+    }
   }
 }
 
