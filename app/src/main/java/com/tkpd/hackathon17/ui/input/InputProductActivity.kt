@@ -4,19 +4,21 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tkpd.hackathon17.data.model.Product
 import com.tkpd.hackathon17.databinding.ActivityInputProductBinding
+import com.tkpd.hackathon17.utils.Utils.getPictureData
 import com.tkpd.hackathon17.viewmodel.ViewModelFactory
 import java.util.*
-import kotlin.collections.ArrayList
 
 class InputProductActivity : AppCompatActivity() {
     private lateinit var binding: ActivityInputProductBinding
@@ -69,11 +71,29 @@ class InputProductActivity : AppCompatActivity() {
         startActivityForResult(intent, REQUEST_CODE_CHOOSE_IMAGE)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_IMAGE) {
             imageUri = data?.data!!
-            Log.d(TAG, "image data = ${data}")
+
+            val exif = getPictureData(this, imageUri)
+            val tagsToCheck = arrayOf(
+                ExifInterface.TAG_DATETIME,
+                ExifInterface.TAG_GPS_LATITUDE,
+                ExifInterface.TAG_GPS_LONGITUDE,
+                ExifInterface.TAG_EXPOSURE_TIME,
+                ExifInterface.TAG_COPYRIGHT,
+                ExifInterface.TAG_DEVICE_SETTING_DESCRIPTION,
+            )
+            val hashMap = HashMap<String, String>()
+            for (tag in tagsToCheck)
+                exif?.getAttribute(tag)?.let {
+                    hashMap[tag] = it
+                    Log.d(TAG, "exif image, $tag = $it")
+                }
+
+            Log.d(TAG, "image data = $data")
             binding.ivImage.visibility = View.VISIBLE
             binding.warningImage.visibility = View.GONE
             binding.ivImage.setImageURI(imageUri)
@@ -86,12 +106,12 @@ class InputProductActivity : AppCompatActivity() {
             val desc: String = etDesc.text.toString()
 
             if (desc.isEmpty()) {
-                etDesc.error = "Mohon diisi terlebih dahulu!"
+                etDesc.error = "Please fill in the data!"
                 etDesc.requestFocus()
                 return
             }
             if (name.isEmpty()) {
-                etName.error = "Mohon diisi terlebih dahulu!"
+                etName.error = "Please fill in the data!"
                 etName.requestFocus()
                 return
             }
@@ -105,7 +125,6 @@ class InputProductActivity : AppCompatActivity() {
             val id = UUID.randomUUID().toString()
             val product = Product(id, name, desc, null)
 
-            Log.d(TAG, "image uri = $imageUri")
             viewModel.addProductToStorage(product, imageUri).apply {
                 val resultIntent = Intent()
                 resultIntent.putExtra(EXTRA_RESULT_ADD, this)
@@ -120,7 +139,7 @@ class InputProductActivity : AppCompatActivity() {
             val tagName = etTag.text.toString()
 
             if (tagName.isEmpty()) {
-                etTag.error = "Mohon diisi terlebih dahulu!"
+                etTag.error = "Please fill in the data!"
                 etTag.requestFocus()
                 return
             }
@@ -156,4 +175,5 @@ class InputProductActivity : AppCompatActivity() {
         super.onBackPressed()
         finish()
     }
+
 }
