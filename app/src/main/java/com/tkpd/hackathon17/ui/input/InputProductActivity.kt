@@ -106,12 +106,12 @@ class InputProductActivity : AppCompatActivity() {
             val product = Product(id, name, desc, null)
 
             Log.d(TAG, "image uri = $imageUri")
-//            viewModel.addProduct(product, imageUri).apply {
-//                val resultIntent = Intent()
-//                resultIntent.putExtra(EXTRA_RESULT_ADD, this)
-//                setResult(RESULT_CODE_ADD_PRODUCT, resultIntent)
-//                finish()
-//            }
+            viewModel.addProductToStorage(product, imageUri).apply {
+                val resultIntent = Intent()
+                resultIntent.putExtra(EXTRA_RESULT_ADD, this)
+                setResult(RESULT_CODE_ADD_PRODUCT, resultIntent)
+                finish()
+            }
         }
     }
 
