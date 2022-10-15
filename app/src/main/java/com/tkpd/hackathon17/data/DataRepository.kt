@@ -25,12 +25,14 @@ class DataRepository {
             storageReference.downloadUrl.addOnSuccessListener { firebaseImageUri ->
                 Log.d(TAG, "image firebase uri $firebaseImageUri")
                 val newProduct = Product(
-                   product.id,
-                   product.title,
-                   product.desc,
-                   product.tags,
-                   firebaseImageUri.toString())
-
+                    product.id,
+                    product.title,
+                    product.price,
+                    product.desc,
+                    product.tags,
+                    firebaseImageUri.toString(),
+                    product.exif
+                )
             }
             Log.d(TAG, "successfully upload image $uploadImage")
         }.addOnFailureListener {
