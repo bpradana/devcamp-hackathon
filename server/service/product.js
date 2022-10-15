@@ -6,7 +6,12 @@ class ProductService {
   }
 
   async getProducts() {
-    return this.productRepository.getProducts();
+    const products = await this.productRepository.getProducts();
+    const productsWithCompletion = await Promise.all(products.map(async (product) => {
+      const completion = await this.checkCompletion(product._id);
+      return { ...product.toObject(), completion };
+    }));
+    return productsWithCompletion;
   }
 
   async getProductById(id) {
@@ -30,7 +35,7 @@ class ProductService {
 
     const emptyFields = [];
     if (!product.title) emptyFields.push('title');
-    if (!product.image.data) emptyFields.push('image');
+    if (!product.image) emptyFields.push('image');
     if (!product.price) emptyFields.push('price');
     if (!product.description) emptyFields.push('description');
     if (!product.specification.size.width) emptyFields.push('size width');
