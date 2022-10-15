@@ -16,11 +16,27 @@
         android:paddingHorizontal="16dp"
         android:paddingVertical="20dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_products"
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@layout/item_product" />
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_products"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/item_product" />
+
+            <Button
+                android:id="@+id/btn_reload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="16dp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
     </androidx.core.widget.NestedScrollView>
 
