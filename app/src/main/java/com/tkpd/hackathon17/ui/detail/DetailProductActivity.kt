@@ -86,6 +86,7 @@ class DetailProductActivity : AppCompatActivity(){
                 rvEmptyFieldss.layoutManager = LinearLayoutManager(this@DetailProductActivity, LinearLayoutManager.HORIZONTAL, false)
                 rvEmptyFieldss.setHasFixedSize(true)
                 rvEmptyFieldss.adapter = emptyFieldsAdapter
+                binding.pleaseComplete.visibility = View.VISIBLE
             }
         } else {
             binding.pleaseComplete.visibility = View.GONE

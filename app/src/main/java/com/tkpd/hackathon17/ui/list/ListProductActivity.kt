@@ -33,13 +33,18 @@ class ListProductActivity : AppCompatActivity() {
             startActivity(Intent(this, InputProductActivity::class.java))
         }
         binding.btnRefresh.setOnClickListener { populateProducts() }
+        binding.btnReload.setOnClickListener { populateProducts() }
     }
 
     private fun populateProducts() {
         viewModel.getListProduct().observe(this) { listProducts ->
             if (listProducts.isNullOrEmpty()) {
                 binding.btnRefresh.visibility = View.VISIBLE
-            } else binding.btnRefresh.visibility = View.GONE
+                binding.btnReload.visibility = View.GONE
+            } else {
+                binding.btnRefresh.visibility = View.GONE
+                binding.btnReload.visibility = View.VISIBLE
+            }
 
             adapter = ProductAdapter(listProducts)
             binding.apply {
