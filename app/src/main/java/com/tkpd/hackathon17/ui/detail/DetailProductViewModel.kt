@@ -9,4 +9,5 @@ class DetailProductViewModel (
     private val repository: DataRepository
 ) : ViewModel() {
     fun getDetailProduct(productId: String): LiveData<ProductResponse> = repository.getDetailProduct(productId)
+    fun deleteProduct(productId: String) = repository.deleteProduct(productId)
 }

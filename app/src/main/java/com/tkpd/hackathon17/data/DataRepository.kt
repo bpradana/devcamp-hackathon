@@ -101,18 +101,30 @@ class DataRepository {
     }
 
     fun getDetailProduct(productId: String): LiveData<ProductResponse> {
-        val photo = MutableLiveData<ProductResponse>()
+        val product = MutableLiveData<ProductResponse>()
         ApiClient.create().getDetailProduct(productId).enqueue(object : Callback<ProductResponse>{
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
                 t.message?.let { Log.d(TAG, it) }
             }
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful) {
-                    photo.postValue(response.body())
+                    product.postValue(response.body())
                 }
             }
         })
-        return photo
+        return product
     }
 
+    fun deleteProduct(productId: String) {
+        ApiClient.create().deleteProduct(productId).enqueue(object : Callback<Void>{
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                t.message?.let { Log.d(TAG, it) }
+            }
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Success delete product")
+                }
+            }
+        })
+    }
 }

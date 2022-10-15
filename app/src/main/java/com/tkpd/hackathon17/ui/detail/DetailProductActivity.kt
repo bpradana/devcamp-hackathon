@@ -3,6 +3,8 @@ package com.tkpd.hackathon17.ui.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +17,7 @@ import com.tkpd.hackathon17.databinding.ActivityDetailProductBinding
 import com.tkpd.hackathon17.ui.input.InputProductActivity.Companion.TAG
 import com.tkpd.hackathon17.viewmodel.ViewModelFactory
 
-class DetailProductActivity : AppCompatActivity() {
+class DetailProductActivity : AppCompatActivity(){
     private lateinit var binding: ActivityDetailProductBinding
     private lateinit var viewModel: DetailProductViewModel
     private lateinit var product: ProductResponse
@@ -100,4 +102,19 @@ class DetailProductActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_detail, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete -> {
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }

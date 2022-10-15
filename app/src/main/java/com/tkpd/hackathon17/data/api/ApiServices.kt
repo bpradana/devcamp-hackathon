@@ -5,7 +5,6 @@ import com.tkpd.hackathon17.data.response.ProductResponse
 import retrofit2.Call
 import retrofit2.http.*
 
-
 interface ApiServices {
     @GET("product")
     fun getListProducts(): Call<ArrayList<ProductResponse>>
@@ -21,4 +20,9 @@ interface ApiServices {
 
     @PUT("product")
     fun updateProduct(@Body product: Product?): Call<Product>
+
+    @DELETE("product")
+    fun deleteProduct(
+        @Path("id") id: String
+    ): Call<Void>
 }
