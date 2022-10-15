@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Hackathon17</string>
+    <string name="save">save</string>
+    <string name="add_new_product">Add New Product</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="choose_image">Choose Image</string>
+    <string name="tags">Tags</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="image_product">Image Product</string>
+    <string name="list_of_products">List of Products</string>
 </resources>
